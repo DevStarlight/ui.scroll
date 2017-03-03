@@ -1,0 +1,11 @@
+{
+  "name": "uiScroll",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "1.6.2",
+    "angular-ui-scroll": "^1.5.1"
+  }
+}

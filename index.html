@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+  
+<head>
+  <meta charset="utf-8">
+  <title>UI.SCROLL</title>
+</head>
+  
+<body ng-app="myModule">
+  <div ng-controller="initController as ctrl">
+    <div ui-scroll-viewport style="overflow-y:auto;display:block;height:150px;">
+      <div ui-scroll="element in ctrl.datasource" buffer-size="5" padding="1">
+        <p ng-bind="element._id"></p>
+      </div>
+    </div>
+  </div>
+  
+  <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+  <script type="text/javascript" src="node_modules/angular-ui-scroll/dist/ui-scroll.min.js"></script>
+  <script>
+    var myModule = angular.module('myModule', ['ui.scroll']);
+    
+    myModule.controller('initController', ['initFactory', function (initFactory) {
+      var vm = this;
+
+      initFactory.getData();
+      vm.datasource = initFactory.scrollData();
+    }]);
+
+    myModule.factory('initFactory', ['$http', '$timeout', function ($http, $timeout) {
+      var elements = {};
+
+      function getData() {
+        return $http.get('data.json').then(function (response) {
+          elements = response.data.data;
+          return;
+        });
+      }
+
+      function scrollData() {
+        return {
+          get: function (index, count, success) {
+            $timeout(function () {
+              success(elements.slice(index, index + count));
+            }, 100);
+          }
+        };
+      }
+      
+      return {
+        getData: getData,
+        scrollData: scrollData
+      };
+    }]);
+  </script>
+</body>
+
+</html>
